@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+h1 {
+    color: #ff3b30;
+}
+
+#pokedex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pokemon {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    width: 150px;
+    transition: transform 0.2s;
+}
+
+.pokemon img {
+    width: 100px;
+    height: 100px;
+}
+
+.pokemon:hover {
+    transform: scale(1.05);
+}
+
+.pokemon h2 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+</style>
+<body>
+    <h1>Pokédex (1-386)</h1>
+    <div id="pokedex"></div>
+
+    <script src="script.js"></script>
+    <script>
+        const pokedex = document.getElementById('pokedex');
+
+// Função para buscar Pokémon e exibir na Pokédex
+const fetchPokemon = async () => {
+    for (let i = 1; i <= 386; i++) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
+        const res = await fetch(url);
+        const pokemon = await res.json();
+        displayPokemon(pokemon);
+    }
+};
+
+// Função para exibir o Pokémon
+const displayPokemon = (pokemon) => {
+    const pokemonDiv = document.createElement('div');
+    pokemonDiv.classList.add('pokemon');
+
+    const pokemonName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1);
+    const pokemonImage = pokemon.sprites.front_default;
+
+    const pokemonInnerHTML = `
+        <img src="${pokemonImage}" alt="${pokemonName}">
+        <h2>${pokemonName} (#${pokemon.id})</h2>
+    `;
+
+    pokemonDiv.innerHTML = pokemonInnerHTML;
+    pokedex.appendChild(pokemonDiv);
+};
+
+// Carregar Pokémon ao iniciar
+fetchPokemon();
+    </script>
+</body>
+</html>
